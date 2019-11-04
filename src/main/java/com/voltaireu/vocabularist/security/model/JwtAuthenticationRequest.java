@@ -1,4 +1,4 @@
-package com.voltaireu.vocabularist.security;
+package com.voltaireu.vocabularist.security.model;
 
 import java.io.Serializable;
 

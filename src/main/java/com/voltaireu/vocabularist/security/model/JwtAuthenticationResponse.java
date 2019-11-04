@@ -1,4 +1,4 @@
-package com.voltaireu.vocabularist.security;
+package com.voltaireu.vocabularist.security.model;
 
 import java.io.Serializable;
 
@@ -6,13 +6,13 @@ public class JwtAuthenticationResponse implements Serializable {
 
     private static final long serialVersionUID = -8091879091924046844L;
 
-    private final String jwtToken;
+    private final String jwt;
 
-    public JwtAuthenticationResponse(String jwtToken) {
-        this.jwtToken = jwtToken;
+    public JwtAuthenticationResponse(String jwt) {
+        this.jwt = jwt;
     }
 
-    public String getToken() {
-        return this.jwtToken;
+    public String getJwt() {
+        return this.jwt;
     }
 }
