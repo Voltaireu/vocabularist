@@ -20,8 +20,8 @@ public final class JwtUserDetailsFactory {
                 mapToGrantedAuthorities(user.getRoles()),
                 user.getPassword(),
                 user.getUsername(),
-                user.isEnabled()
-        );
+                user.isEnabled(),
+                user.getNativeLanguage());
     }
 
     private static List<GrantedAuthority> mapToGrantedAuthorities(List<Role> authorities) {

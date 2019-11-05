@@ -1,6 +1,7 @@
 package com.voltaireu.vocabularist.user;
 
 import com.fasterxml.jackson.annotation.JsonView;
+import com.voltaireu.vocabularist.language.LanguageName;
 import com.voltaireu.vocabularist.other.Views;
 import com.voltaireu.vocabularist.security.model.Role;
 
@@ -44,10 +45,10 @@ public class User {
     @JsonView(Views.Internal.class)
     private boolean enabled;
 
-//    @ManyToOne(fetch = FetchType.EAGER)
-//    @JoinColumn(name = "language_id")
-//    @JsonView(Views.Public.class)
-//    private Language nativeLanguage;
+    @Column(name = "user_native_language")
+    @JsonView(Views.Public.class)
+    @Enumerated(EnumType.STRING)
+    private LanguageName nativeLanguage;
 
     @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     @JoinTable(
@@ -60,10 +61,12 @@ public class User {
     public User(
             String username,
             String password,
-            String email) {
+            String email,
+            LanguageName nativeLanguage) {
         this.username = username;
         this.password = password;
         this.email = email;
+        this.nativeLanguage = nativeLanguage;
         this.enabled = false;
     }
 
@@ -82,6 +85,14 @@ public class User {
 
     public Long getId() {
         return id;
+    }
+
+    public LanguageName getNativeLanguage() {
+        return nativeLanguage;
+    }
+
+    public void setNativeLanguage(LanguageName nativeLanguage) {
+        this.nativeLanguage = nativeLanguage;
     }
 
     public String getUsername() {

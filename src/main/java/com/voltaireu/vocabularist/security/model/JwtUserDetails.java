@@ -1,5 +1,6 @@
 package com.voltaireu.vocabularist.security.model;
 
+import com.voltaireu.vocabularist.language.LanguageName;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
@@ -14,22 +15,28 @@ public class JwtUserDetails implements UserDetails {
     private final String password;
     private final String username;
     private final boolean enabled;
+    private final LanguageName nativeLanguage;
 
     public JwtUserDetails(
             Long id, Collection<? extends GrantedAuthority> authorities,
             String password,
             String username,
-            Boolean enabled
-    ) {
+            Boolean enabled,
+            LanguageName nativeLanguage) {
         this.id = id;
         this.authorities = authorities;
         this.password = password;
         this.username = username;
         this.enabled = enabled;
+        this.nativeLanguage = nativeLanguage;
     }
 
     public Long getId() {
         return id;
+    }
+
+    public LanguageName getNativeLanguage() {
+        return nativeLanguage;
     }
 
     @Override

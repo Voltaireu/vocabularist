@@ -1,5 +1,6 @@
 package com.voltaireu.vocabularist.security.controller;
 
+import com.voltaireu.vocabularist.security.model.JwtUserDetails;
 import com.voltaireu.vocabularist.security.service.DefaultUserDetailsService;
 import com.voltaireu.vocabularist.security.util.JwtUtil;
 import org.springframework.security.core.userdetails.User;
@@ -23,9 +24,9 @@ public class UserRestController {
     }
 
     @GetMapping("/user")
-    public User getAuthenticatedUser(HttpServletRequest request) {
+    public JwtUserDetails getAuthenticatedUser(HttpServletRequest request) {
         String token = request.getHeader("Authorization").substring(7);
         String username = jwtUtil.extractUsername(token);
-        return (User) userDetailsService.loadUserByUsername(username);
+        return (JwtUserDetails) userDetailsService.loadUserByUsername(username);
     }
 }
