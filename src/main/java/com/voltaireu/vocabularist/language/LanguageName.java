@@ -10,12 +10,12 @@ public enum LanguageName {
 
     private String value;
 
-    private LanguageName(String value) {
+    LanguageName(String value) {
         this.value = value;
     }
 
     public static List<String> getLanguages() {
-        return Stream.of(LanguageName.values())
+         return Stream.of(LanguageName.values())
                 .map(LanguageName::name)
                 .collect(Collectors.toList());
     }

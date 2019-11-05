@@ -4,11 +4,14 @@ import com.fasterxml.jackson.annotation.JsonView;
 import com.voltaireu.vocabularist.language.LanguageName;
 import com.voltaireu.vocabularist.other.Views;
 import com.voltaireu.vocabularist.security.model.Role;
+import com.voltaireu.vocabularist.website.Website;
+import com.voltaireu.vocabularist.word.UserWord;
 
 import javax.persistence.*;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
+import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -17,7 +20,7 @@ import java.util.List;
 public class User {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue
     @Column(name = "user_id")
     @JsonView(Views.Internal.class)
     private Long id;
@@ -50,6 +53,12 @@ public class User {
     @Enumerated(EnumType.STRING)
     private LanguageName nativeLanguage;
 
+    @OneToMany(mappedBy = "user")
+    private List<Website> websites = new ArrayList<>();
+
+    @OneToMany(mappedBy = "user")
+    private List<UserWord> userWords = new ArrayList<>();
+
     @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     @JoinTable(
             name = "user_role",
@@ -74,6 +83,22 @@ public class User {
         this.enabled = false;
     }
 
+
+    public List<UserWord> getUserWords() {
+        return userWords;
+    }
+
+    public void addUserWord(UserWord userWord) {
+        userWords.add(userWord);
+    }
+
+    public List<Website> getWebsites() {
+        return websites;
+    }
+
+    public void addWebsite(Website website) {
+        websites.add(website);
+    }
 
     public List<Role> getRoles() {
         return roles;
