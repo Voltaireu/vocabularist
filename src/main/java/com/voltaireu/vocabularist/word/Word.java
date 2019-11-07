@@ -19,21 +19,8 @@ public class Word {
     @Column(name = "word_text")
     private String text;
 
-    @Column(name = "word_language")
-    @Enumerated(EnumType.STRING)
-    private LanguageName language;
-
-    @Column(name = "word_part_of_speech")
-    @Enumerated(EnumType.STRING)
-    private PartOfSpeechName partOfSpeech;
-
-    public Word() {
-    }
-
-    public Word(String text, LanguageName language, PartOfSpeechName partOfSpeech) {
+    public Word(String text, LanguageName language) {
         this.text = text;
-        this.language = language;
-        this.partOfSpeech = partOfSpeech;
     }
 
     public Long getId() {
@@ -46,21 +33,5 @@ public class Word {
 
     public void setText(String text) {
         this.text = text;
-    }
-
-    public LanguageName getLanguage() {
-        return language;
-    }
-
-    public void setLanguage(LanguageName language) {
-        this.language = language;
-    }
-
-    public PartOfSpeechName getPartOfSpeech() {
-        return partOfSpeech;
-    }
-
-    public void setPartOfSpeech(PartOfSpeechName partOfSpeech) {
-        this.partOfSpeech = partOfSpeech;
     }
 }

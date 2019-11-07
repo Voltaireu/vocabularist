@@ -2,10 +2,11 @@ package com.voltaireu.vocabularist.website;
 
 import com.fasterxml.jackson.annotation.JsonView;
 import com.voltaireu.vocabularist.dictionary.Dictionary;
-import com.voltaireu.vocabularist.other.Views;
 import com.voltaireu.vocabularist.user.User;
+import org.hibernate.validator.constraints.URL;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotEmpty;
 
 @Entity
 @Table(name = "website")
@@ -16,6 +17,8 @@ public class Website {
     @Column(name = "website_id")
     private Long id;
 
+    @URL
+    @NotEmpty
     @Column(name = "website_url")
     private String url;
 
