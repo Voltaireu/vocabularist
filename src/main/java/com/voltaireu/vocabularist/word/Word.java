@@ -1,7 +1,6 @@
 package com.voltaireu.vocabularist.word;
 
 import com.fasterxml.jackson.annotation.JsonView;
-import com.voltaireu.vocabularist.language.LanguageName;
 import com.voltaireu.vocabularist.other.Views;
 
 import javax.persistence.*;
@@ -13,13 +12,15 @@ public class Word {
     @Id
     @GeneratedValue
     @Column(name = "word_id")
-    @JsonView(Views.Public.class)
     private Long id;
 
-    @Column(name = "word_text")
+    @Column(name = "word_text", unique = true)
     private String text;
 
-    public Word(String text, LanguageName language) {
+    public Word() {
+    }
+
+    public Word(String text) {
         this.text = text;
     }
 

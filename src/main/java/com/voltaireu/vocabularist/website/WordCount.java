@@ -1,23 +1,21 @@
 package com.voltaireu.vocabularist.website;
 
-import com.voltaireu.vocabularist.word.Word;
-
 public class WordCount {
 
-    private String word;
+    private String text;
     private int amount;
 
-    WordCount(String word, int amount) {
-        this.word = word;
+    WordCount(String text, int amount) {
+        this.text = text;
         this.amount = amount;
     }
 
-    public String getWord() {
-        return word;
+    public String getText() {
+        return text;
     }
 
-    public void setWord(String word) {
-        this.word = word;
+    public void setText(String text) {
+        this.text = text;
     }
 
     public int getAmount() {

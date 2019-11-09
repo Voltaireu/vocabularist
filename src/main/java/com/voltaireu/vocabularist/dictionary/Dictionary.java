@@ -1,9 +1,7 @@
 package com.voltaireu.vocabularist.dictionary;
 
-import com.fasterxml.jackson.annotation.JsonView;
-import com.voltaireu.vocabularist.other.Views;
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.voltaireu.vocabularist.website.Website;
-import com.voltaireu.vocabularist.word.DictionaryWord;
 
 import javax.persistence.*;
 import java.util.ArrayList;
@@ -18,11 +16,12 @@ public class Dictionary {
     @Column(name = "dictionary_id")
     private Long id;
 
-    @OneToOne(mappedBy = "dictionary")
+    @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "website_id")
+    @JsonBackReference
     private Website website;
 
-    @OneToMany(mappedBy = "dictionary")
+    @OneToMany
     private List<DictionaryWord> dictionaryWords = new ArrayList<>();
 
     public Dictionary() {
@@ -49,7 +48,11 @@ public class Dictionary {
         return dictionaryWords;
     }
 
-    public void setDictionaryWords(List<DictionaryWord> dictionaryWords) {
-        this.dictionaryWords = dictionaryWords;
+    public void addDictionaryWord(DictionaryWord dictionaryWord) {
+        this.dictionaryWords.add(dictionaryWord);
+    }
+
+    public void removeDictionaryWord(DictionaryWord dictionaryWord) {
+        this.dictionaryWords.remove(dictionaryWord);
     }
 }

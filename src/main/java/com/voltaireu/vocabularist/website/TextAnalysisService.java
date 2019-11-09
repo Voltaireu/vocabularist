@@ -1,6 +1,5 @@
 package com.voltaireu.vocabularist.website;
 
-import com.voltaireu.vocabularist.word.Word;
 import org.springframework.stereotype.Service;
 
 import java.util.*;

@@ -1,6 +1,6 @@
 package com.voltaireu.vocabularist.website;
 
-import com.fasterxml.jackson.annotation.JsonView;
+import com.fasterxml.jackson.annotation.*;
 import com.voltaireu.vocabularist.dictionary.Dictionary;
 import com.voltaireu.vocabularist.user.User;
 import org.hibernate.validator.constraints.URL;
@@ -22,12 +22,18 @@ public class Website {
     @Column(name = "website_url")
     private String url;
 
-    @OneToOne(fetch = FetchType.LAZY, optional = false)
-    @JoinColumn(name = "dictionary_id")
+    @OneToOne
+    @JoinColumn(name = "website_dictionary_id")
+    @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class,
+            property = "id")
+    @JsonIdentityReference(alwaysAsId = true)
     private Dictionary dictionary;
 
-    @ManyToOne(optional = false)
-    @JoinColumn(name = "website_user")
+    @ManyToOne
+    @JoinColumn(name = "website_user_id")
+    @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class,
+            property = "id")
+    @JsonIdentityReference(alwaysAsId = true)
     private User user;
 
     public Website() {

@@ -1,7 +1,6 @@
 package com.voltaireu.vocabularist.user;
 
 import com.fasterxml.jackson.annotation.JsonView;
-import com.voltaireu.vocabularist.language.LanguageName;
 import com.voltaireu.vocabularist.other.Views;
 import com.voltaireu.vocabularist.security.model.Role;
 import com.voltaireu.vocabularist.website.Website;
@@ -22,7 +21,7 @@ public class User {
     @Id
     @GeneratedValue
     @Column(name = "user_id")
-    @JsonView(Views.Internal.class)
+    @JsonView(Views.Public.class)
     private Long id;
 
     @NotNull
@@ -48,15 +47,10 @@ public class User {
     @JsonView(Views.Internal.class)
     private boolean enabled;
 
-    @Column(name = "user_native_language")
-    @JsonView(Views.Public.class)
-    @Enumerated(EnumType.STRING)
-    private LanguageName nativeLanguage;
-
-    @OneToMany(mappedBy = "user")
+    @OneToMany
     private List<Website> websites = new ArrayList<>();
 
-    @OneToMany(mappedBy = "user")
+    @OneToMany(fetch = FetchType.LAZY)
     private List<UserWord> userWords = new ArrayList<>();
 
     @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
@@ -70,12 +64,10 @@ public class User {
     public User(
             String username,
             String password,
-            String email,
-            LanguageName nativeLanguage) {
+            String email) {
         this.username = username;
         this.password = password;
         this.email = email;
-        this.nativeLanguage = nativeLanguage;
         this.enabled = false;
     }
 
@@ -100,6 +92,10 @@ public class User {
         websites.add(website);
     }
 
+    public void removeWebsite(Website website) {
+        websites.remove(website);
+    }
+
     public List<Role> getRoles() {
         return roles;
     }
@@ -110,14 +106,6 @@ public class User {
 
     public Long getId() {
         return id;
-    }
-
-    public LanguageName getNativeLanguage() {
-        return nativeLanguage;
-    }
-
-    public void setNativeLanguage(LanguageName nativeLanguage) {
-        this.nativeLanguage = nativeLanguage;
     }
 
     public String getUsername() {

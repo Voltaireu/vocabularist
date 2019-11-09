@@ -1,8 +1,8 @@
-package com.voltaireu.vocabularist.word;
+package com.voltaireu.vocabularist.dictionary;
 
 import com.fasterxml.jackson.annotation.JsonView;
-import com.voltaireu.vocabularist.dictionary.Dictionary;
 import com.voltaireu.vocabularist.other.Views;
+import com.voltaireu.vocabularist.word.UserWord;
 
 import javax.persistence.*;
 
