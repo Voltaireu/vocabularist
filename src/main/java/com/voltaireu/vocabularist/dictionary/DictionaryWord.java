@@ -2,7 +2,7 @@ package com.voltaireu.vocabularist.dictionary;
 
 import com.fasterxml.jackson.annotation.JsonView;
 import com.voltaireu.vocabularist.other.Views;
-import com.voltaireu.vocabularist.word.UserWord;
+import com.voltaireu.vocabularist.word.Word;
 
 import javax.persistence.*;
 
@@ -19,21 +19,20 @@ public class DictionaryWord {
     @Column(name = "dictionary_word_amount")
     private int amountInSource;
 
-    @ManyToOne(optional = false)
-    @JoinColumn(name = "user_word_id")
-    private UserWord userWord;
-
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "dictionary_id")
     private Dictionary dictionary;
 
+    @ManyToOne
+    @JoinColumn(name = "word_id")
+    private Word word;
+
     public DictionaryWord() {
     }
 
-    public DictionaryWord(int amountInSource, UserWord userWord, Dictionary dictionary) {
+    public DictionaryWord(int amountInSource, Word word) {
         this.amountInSource = amountInSource;
-        this.userWord = userWord;
-        this.dictionary = dictionary;
+        this.word = word;
     }
 
     public Long getId() {
@@ -48,19 +47,19 @@ public class DictionaryWord {
         this.amountInSource = amountInSource;
     }
 
-    public UserWord getUserWord() {
-        return userWord;
-    }
-
-    public void setUserWord(UserWord userWord) {
-        this.userWord = userWord;
-    }
-
     public Dictionary getDictionary() {
         return dictionary;
     }
 
     public void setDictionary(Dictionary dictionary) {
         this.dictionary = dictionary;
+    }
+
+    public Word getWord() {
+        return word;
+    }
+
+    public void setWord(Word word) {
+        this.word = word;
     }
 }

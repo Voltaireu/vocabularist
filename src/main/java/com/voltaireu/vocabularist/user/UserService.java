@@ -6,6 +6,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import javax.persistence.EntityManager;
 import java.util.NoSuchElementException;
 
 import static com.voltaireu.vocabularist.security.model.RoleName.ROLE_USER;
@@ -24,26 +25,18 @@ public class UserService {
     }
 
     public void register(User user){
-        Role role = roleRepository.findByName(ROLE_USER);
-
+        Role role = roleRepository.getByName(ROLE_USER);
         user.addRole(role);
         user.setPassword(passwordEncoder.encode(user.getPassword()));
         user.setEnabled(true);
         userRepository.save(user);
-
-        role.addUser(user);
-        roleRepository.save(role);
     }
 
     public String getUsername() {
         return SecurityContextHolder.getContext().getAuthentication().getName();
     }
 
-    public User getUserReference(long userId) {
-        return userRepository.getById(userId);
-    }
-
-    public User getUser() {
+    public User getAuthenticatedUser() {
         String username = getUsername();
         return userRepository.findByUsername(username);
     }
@@ -53,7 +46,11 @@ public class UserService {
                 .orElseThrow(() -> new NoSuchElementException(String.format("No user with id %d found!", userId)));
     }
 
-    public void save(User userReference) {
-        userRepository.save(userReference);
+    public void save(User user) {
+        userRepository.save(user);
+    }
+
+    public User getUserReference(long userId) {
+        return userRepository.getOne(userId);
     }
 }

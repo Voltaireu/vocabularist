@@ -39,10 +39,8 @@ public class Website {
     public Website() {
     }
 
-    public Website(String url, Dictionary dictionary, User user) {
+    public Website(String url) {
         this.url = url;
-        this.dictionary = dictionary;
-        this.user = user;
     }
 
     public Long getId() {

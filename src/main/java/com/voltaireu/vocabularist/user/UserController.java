@@ -20,7 +20,7 @@ public class UserController {
     @ResponseStatus(HttpStatus.CREATED)
     @PostMapping("/users")
     @JsonView(Views.Public.class)
-    public User signUp(@RequestBody @Valid User user) {
+    public User createUser(@RequestBody @Valid User user) {
         userService.register(user);
         return user;
     }

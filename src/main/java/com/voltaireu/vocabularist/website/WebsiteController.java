@@ -23,7 +23,7 @@ public class WebsiteController {
     }
 
     @GetMapping("/users/{userId}/websites")
-    public List<Website> getAllWebsites(@PathVariable long userId) {
+    public List<Website> getAllUserWebsites(@PathVariable long userId) {
         return websiteService.getAllUserWebsites(userId);
     }
 

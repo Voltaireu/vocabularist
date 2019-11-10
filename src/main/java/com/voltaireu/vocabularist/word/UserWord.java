@@ -30,10 +30,9 @@ public class UserWord {
     public UserWord() {
     }
 
-    public UserWord(Word word, int amountInGeneral, User user) {
+    public UserWord(Word word, int amountInGeneral) {
         this.word = word;
         this.amountInGeneral = amountInGeneral;
-        this.user = user;
     }
 
     public Long getId() {

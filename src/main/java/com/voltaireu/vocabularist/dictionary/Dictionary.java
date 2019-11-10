@@ -27,9 +27,8 @@ public class Dictionary {
     public Dictionary() {
     }
 
-    public Dictionary(Website website, List<DictionaryWord> dictionaryWords) {
+    public Dictionary(Website website) {
         this.website = website;
-        this.dictionaryWords = dictionaryWords;
     }
 
     public Long getId() {
