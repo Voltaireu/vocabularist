@@ -1,5 +1,6 @@
 package com.voltaireu.vocabularist.website;
 
+import com.voltaireu.vocabularist.other.ResourceAlreadyExistsException;
 import com.voltaireu.vocabularist.user.User;
 import com.voltaireu.vocabularist.user.UserService;
 import com.voltaireu.vocabularist.word.Word;
@@ -7,7 +8,10 @@ import com.voltaireu.vocabularist.word.WordRepository;
 import com.voltaireu.vocabularist.word.WordService;
 import org.springframework.stereotype.Service;
 
+import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 
 @Service
 public class WebsiteService {
@@ -32,8 +36,14 @@ public class WebsiteService {
     }
 
     public Website add(long userId, Website website) {
-        //If Website with given User and url exists return 409 Conflict
         User userReference = userService.getUserReference(userId);
+
+        String url = website.getUrl();
+        if(websiteRepository.existsByUserAndUrl(userReference, url)) {
+            String message = "Website with User Id " + userId + " and url " + url + " already exists!";
+            throw new ResourceAlreadyExistsException(message);
+        };
+
         website.setUser(userReference);
         return websiteRepository.save(website);
     }
@@ -44,11 +54,15 @@ public class WebsiteService {
 
         Word word = wordRepository.findByText(text)
                 .orElse(wordRepository.save(new Word(text)));
-        WebsiteWord websiteWord = new WebsiteWord(amount, word);
 
         Website websiteReference = websiteRepository.getOne(websiteId);
-        websiteWord.setWebsite(websiteReference);
+        if(websiteWordRepository.existsByWebsiteAndWord(websiteReference, word)) {
+            String message = "WebsiteWord with text " + text + " is already in Website with id " + websiteId + "!";
+            throw new ResourceAlreadyExistsException(message);
+        }
 
+        WebsiteWord websiteWord = new WebsiteWord(amount, word);
+        websiteWord.setWebsite(websiteReference);
         websiteWordRepository.save(websiteWord);
 
         wordService.increaseUserWordAmount(word, amount);

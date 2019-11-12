@@ -1,13 +1,11 @@
 package com.voltaireu.vocabularist.user;
 
+import com.voltaireu.vocabularist.other.ResourceNotFoundException;
 import com.voltaireu.vocabularist.security.model.Role;
 import com.voltaireu.vocabularist.security.repository.RoleRepository;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-
-import javax.persistence.EntityManager;
-import java.util.NoSuchElementException;
 
 import static com.voltaireu.vocabularist.security.model.RoleName.ROLE_USER;
 
@@ -43,7 +41,7 @@ public class UserService {
 
     public User getUser(long userId) {
         return userRepository.findById(userId)
-                .orElseThrow(() -> new NoSuchElementException(String.format("No user with id %d found!", userId)));
+                .orElseThrow(() -> new ResourceNotFoundException(User.class, userId));
     }
 
     public void save(User user) {
