@@ -1,4 +1,4 @@
-package com.voltaireu.vocabularist.dictionary;
+package com.voltaireu.vocabularist.website;
 
 import com.fasterxml.jackson.annotation.JsonView;
 import com.voltaireu.vocabularist.other.Views;
@@ -7,30 +7,30 @@ import com.voltaireu.vocabularist.word.Word;
 import javax.persistence.*;
 
 @Entity
-@Table(name = "dictionary_word")
-public class DictionaryWord {
+@Table(name = "website_word")
+public class WebsiteWord {
 
     @Id
     @GeneratedValue
-    @Column(name = "dictionary_word_id")
+    @Column(name = "website_word_id")
     @JsonView(Views.Public.class)
     private Long id;
 
-    @Column(name = "dictionary_word_amount")
+    @Column(name = "website_word_amount")
     private int amountInSource;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "dictionary_id")
-    private Dictionary dictionary;
+    @ManyToOne
+    @JoinColumn(name = "website_id")
+    private Website website;
 
     @ManyToOne
     @JoinColumn(name = "word_id")
     private Word word;
 
-    public DictionaryWord() {
+    public WebsiteWord() {
     }
 
-    public DictionaryWord(int amountInSource, Word word) {
+    public WebsiteWord(int amountInSource, Word word) {
         this.amountInSource = amountInSource;
         this.word = word;
     }
@@ -47,19 +47,19 @@ public class DictionaryWord {
         this.amountInSource = amountInSource;
     }
 
-    public Dictionary getDictionary() {
-        return dictionary;
-    }
-
-    public void setDictionary(Dictionary dictionary) {
-        this.dictionary = dictionary;
-    }
-
     public Word getWord() {
         return word;
     }
 
     public void setWord(Word word) {
         this.word = word;
+    }
+
+    public Website getWebsite() {
+        return website;
+    }
+
+    public void setWebsite(Website website) {
+        this.website = website;
     }
 }

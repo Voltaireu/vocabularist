@@ -8,7 +8,6 @@ import org.springframework.web.bind.annotation.*;
 import javax.validation.constraints.NotNull;
 import java.io.IOException;
 import java.util.List;
-import java.util.Map;
 
 @RestController
 @Validated
@@ -23,7 +22,7 @@ public class ScrapperController {
     }
 
     @PostMapping("/fetch-website")
-    public List<WordCount> fetchWebsite(@NotNull @URL @RequestParam String url) throws IOException {
+    public List<WordAmountDTO> fetchWebsite(@NotNull @URL @RequestParam String url) throws IOException {
         Document website = scrapperService.getWebsite(url);
         String websiteBodyString = scrapperService.parseHtmlToString(website);
         return textAnalysisService.countWords(websiteBodyString);

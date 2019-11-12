@@ -10,14 +10,14 @@ import static java.util.stream.Collectors.toMap;
 @Service
 public class TextAnalysisService {
 
-    List<WordCount> countWords(String text) {
+    List<WordAmountDTO> countWords(String text) {
         List<String> words = extractWords(text);
         Map<String, Integer> countedWords = countWords(words);
         Map<String, Integer> sortedCountedWords = sortByAmountDescending(countedWords);
 
-        List<WordCount> wordCounts = new LinkedList<>();
-        sortedCountedWords.forEach((word,amount)-> wordCounts.add(new WordCount(word, amount)));
-        return wordCounts;
+        List<WordAmountDTO> resultWords = new LinkedList<>();
+        sortedCountedWords.forEach((word,amount)-> resultWords.add(new WordAmountDTO(word, amount)));
+        return resultWords;
     }
 
     //TODO Add more advanced mechanism extracting phrasal verbs from text
@@ -51,8 +51,4 @@ public class TextAnalysisService {
     private List<String> removeDuplicates(List<String> words) {
         return words.stream().distinct().collect(Collectors.toList());
     }
-
-//    private List<Word> extractSupportedWords(List<String> words) {
-//        List<String> wordsWithoutDuplicates = removeDuplicates(words);
-//    }
 }

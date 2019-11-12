@@ -28,10 +28,10 @@ public class UserWord {
     private User user;
 
     public UserWord() {
+        this.amountInGeneral = 0;
     }
 
-    public UserWord(Word word, int amountInGeneral) {
-        this.word = word;
+    public UserWord(int amountInGeneral) {
         this.amountInGeneral = amountInGeneral;
     }
 

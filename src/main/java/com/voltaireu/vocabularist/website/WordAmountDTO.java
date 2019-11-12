@@ -1,11 +1,11 @@
 package com.voltaireu.vocabularist.website;
 
-public class WordCount {
+public class WordAmountDTO {
 
     private String text;
     private int amount;
 
-    WordCount(String text, int amount) {
+    WordAmountDTO(String text, int amount) {
         this.text = text;
         this.amount = amount;
     }
