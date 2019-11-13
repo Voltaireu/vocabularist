@@ -24,6 +24,7 @@ public class Website {
     private String url;
 
     @OneToMany
+    @JsonIgnore
     private List<WebsiteWord> websiteWords = new ArrayList<>();
 
     @ManyToOne
@@ -52,6 +53,7 @@ public class Website {
         this.url = url;
     }
 
+    @JsonProperty("userId")
     public User getUser() {
         return user;
     }

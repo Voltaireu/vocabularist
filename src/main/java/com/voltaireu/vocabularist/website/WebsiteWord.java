@@ -1,5 +1,7 @@
 package com.voltaireu.vocabularist.website;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonView;
 import com.voltaireu.vocabularist.other.Views;
 import com.voltaireu.vocabularist.word.Word;
@@ -13,13 +15,13 @@ public class WebsiteWord {
     @Id
     @GeneratedValue
     @Column(name = "website_word_id")
-    @JsonView(Views.Public.class)
     private Long id;
 
     @Column(name = "website_word_amount")
-    private int amountInSource;
+    private int amountOnWebsite;
 
     @ManyToOne
+    @JsonIgnore
     @JoinColumn(name = "website_id")
     private Website website;
 
@@ -30,8 +32,8 @@ public class WebsiteWord {
     public WebsiteWord() {
     }
 
-    public WebsiteWord(int amountInSource, Word word) {
-        this.amountInSource = amountInSource;
+    public WebsiteWord(int amountOnWebsite, Word word) {
+        this.amountOnWebsite = amountOnWebsite;
         this.word = word;
     }
 
@@ -39,12 +41,12 @@ public class WebsiteWord {
         return id;
     }
 
-    public int getAmountInSource() {
-        return amountInSource;
+    public int getAmountOnWebsite() {
+        return amountOnWebsite;
     }
 
-    public void setAmountInSource(int amountInSource) {
-        this.amountInSource = amountInSource;
+    public void setAmountOnWebsite(int amountOnWebsite) {
+        this.amountOnWebsite = amountOnWebsite;
     }
 
     public Word getWord() {

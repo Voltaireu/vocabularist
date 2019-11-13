@@ -12,8 +12,14 @@ public class ScrapperService {
     public ScrapperService() {
     }
 
-    Document getWebsite(String url) throws IOException {
-        return Jsoup.connect(url).get();
+    Document getWebsite(String url) {
+        Document document;
+        try {
+            document = Jsoup.connect(url).get();
+        } catch (IOException e) {
+            throw new RuntimeException("Server can not connect to website with url " + url + " !");
+        }
+        return document;
     }
 
     String parseHtmlToString(Document doc) {

@@ -8,7 +8,6 @@ import javax.servlet.http.HttpServletResponse;
 
 import com.voltaireu.vocabularist.security.service.DefaultUserDetailsService;
 import com.voltaireu.vocabularist.security.util.JwtUtil;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;

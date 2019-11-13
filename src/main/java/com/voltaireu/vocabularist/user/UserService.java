@@ -1,5 +1,6 @@
 package com.voltaireu.vocabularist.user;
 
+import com.voltaireu.vocabularist.other.ResourceAlreadyExistsException;
 import com.voltaireu.vocabularist.other.ResourceNotFoundException;
 import com.voltaireu.vocabularist.security.model.Role;
 import com.voltaireu.vocabularist.security.repository.RoleRepository;
@@ -23,6 +24,11 @@ public class UserService {
     }
 
     public void register(User user){
+        if (userRepository.existsByEmail(user.getEmail()) || userRepository.existsByUsername(user.getUsername())) {
+            String message = "User with given email or username already exists";
+            throw new ResourceAlreadyExistsException(message);
+        }
+
         Role role = roleRepository.getByName(ROLE_USER);
         user.addRole(role);
         user.setPassword(passwordEncoder.encode(user.getPassword()));
@@ -50,5 +56,13 @@ public class UserService {
 
     public User getUserReference(long userId) {
         return userRepository.getOne(userId);
+    }
+
+    public boolean isUsernameNotOccupied(String username) {
+        return !userRepository.existsByUsername(username);
+    }
+
+    public boolean IsEmailNotOccupied(String email) {
+        return !userRepository.existsByEmail(email);
     }
 }

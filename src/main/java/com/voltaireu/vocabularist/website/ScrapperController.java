@@ -21,8 +21,8 @@ public class ScrapperController {
         this.textAnalysisService = textAnalysisService;
     }
 
-    @PostMapping("/fetch-website")
-    public List<WordAmountDTO> fetchWebsite(@NotNull @URL @RequestParam String url) throws IOException {
+    @GetMapping("/fetch-website")
+    public List<WordAmountDTO> fetchWebsite(@NotNull @URL @RequestParam String url) {
         Document website = scrapperService.getWebsite(url);
         String websiteBodyString = scrapperService.parseHtmlToString(website);
         return textAnalysisService.countWords(websiteBodyString);

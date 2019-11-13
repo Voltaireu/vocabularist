@@ -27,6 +27,11 @@ public class WebsiteController {
         return websiteService.add(userId, website);
     }
 
+    @GetMapping("/websites/{websiteId}/words")
+    public List<WebsiteWordDTO> getAllWebsiteWords(@PathVariable long websiteId) {
+        return websiteService.getAllUserWebsiteWords(websiteId);
+    }
+
     @ResponseStatus(HttpStatus.CREATED)
     @PostMapping("/websites/{websiteId}/words")
     public WebsiteWord addWebsiteWord(@PathVariable long websiteId, @RequestBody WordAmountDTO wordAmountDTO) {
