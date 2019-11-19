@@ -1,4 +1,4 @@
-package com.voltaireu.vocabularist.security.authority;
+package com.voltaireu.vocabularist.security.role;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;

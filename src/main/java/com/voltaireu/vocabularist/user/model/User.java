@@ -3,7 +3,7 @@ package com.voltaireu.vocabularist.user.model;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonView;
 import com.voltaireu.vocabularist.other.Views;
-import com.voltaireu.vocabularist.security.authority.Role;
+import com.voltaireu.vocabularist.security.role.Role;
 import com.voltaireu.vocabularist.website.model.Website;
 import com.voltaireu.vocabularist.word.model.UserWord;
 

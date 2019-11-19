@@ -1,7 +1,4 @@
-package com.voltaireu.vocabularist.security.authority;
-
-import com.fasterxml.jackson.annotation.JsonView;
-import com.voltaireu.vocabularist.other.Views;
+package com.voltaireu.vocabularist.security.role;
 
 import javax.persistence.*;
 

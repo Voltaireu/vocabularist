@@ -19,15 +19,15 @@ public class WebsiteController {
         this.websiteService = websiteService;
     }
 
-    @GetMapping("/users/{userId}/websites")
-    public List<Website> getAllUserWebsites(@PathVariable long userId) {
-        return websiteService.getAllUserWebsites(userId);
+    @GetMapping("/users/me/websites")
+    public List<Website> getAllUserWebsites() {
+        return websiteService.getAllUserWebsites();
     }
 
     @ResponseStatus(HttpStatus.CREATED)
-    @PostMapping("users/{userId}/websites")
-    public Website addWebsite(@PathVariable long userId, @RequestBody Website website) {
-        return websiteService.add(userId, website);
+    @PostMapping("/websites")
+    public Website addWebsite(@RequestBody Website website) {
+        return websiteService.add(website);
     }
 
     @GetMapping("/websites/{websiteId}/words")
@@ -39,10 +39,5 @@ public class WebsiteController {
     @PostMapping("/websites/{websiteId}/words")
     public WebsiteWord addWebsiteWord(@PathVariable long websiteId, @RequestBody WordAmountDTO wordAmountDTO) {
         return websiteService.addWebsiteWord(websiteId, wordAmountDTO);
-    }
-
-    @GetMapping("websites/{websiteId}")
-    public Website getWebsite(@PathVariable long websiteId) {
-        return websiteService.getWebsite(websiteId);
     }
 }

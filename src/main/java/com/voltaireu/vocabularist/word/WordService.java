@@ -1,5 +1,6 @@
 package com.voltaireu.vocabularist.word;
 
+import com.voltaireu.vocabularist.other.ResourceNotFoundException;
 import com.voltaireu.vocabularist.user.model.User;
 import com.voltaireu.vocabularist.user.UserService;
 import com.voltaireu.vocabularist.word.model.UserWord;
@@ -11,10 +12,22 @@ public class WordService {
 
     private final UserService userService;
     private final UserWordRepository userWordRepository;
+    private final WordRepository wordRepository;
 
-    public WordService(UserService userService, UserWordRepository userWordRepository) {
+    public WordService(UserService userService, UserWordRepository userWordRepository, WordRepository wordRepository) {
         this.userService = userService;
         this.userWordRepository = userWordRepository;
+        this.wordRepository = wordRepository;
+    }
+
+    public Word getWordByText(String text, boolean allowCreate) {
+        if (allowCreate) {
+            return wordRepository.findByText(text)
+                    .orElse(wordRepository.save(new Word(text)));
+        }
+
+        return wordRepository.findByText(text)
+                .orElseThrow(()-> new ResourceNotFoundException(Word.class, "text", text));
     }
 
     //TODO Refactor - Lambda Expressions?

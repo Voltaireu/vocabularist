@@ -2,8 +2,8 @@ package com.voltaireu.vocabularist.user;
 
 import com.voltaireu.vocabularist.other.ResourceAlreadyExistsException;
 import com.voltaireu.vocabularist.other.ResourceNotFoundException;
-import com.voltaireu.vocabularist.security.authority.Role;
-import com.voltaireu.vocabularist.security.authority.RoleRepository;
+import com.voltaireu.vocabularist.security.role.Role;
+import com.voltaireu.vocabularist.security.role.RoleRepository;
 import com.voltaireu.vocabularist.user.model.User;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;

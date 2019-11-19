@@ -30,30 +30,28 @@ public class WebsiteService {
     private final WordService wordService;
     private final UserService userService;
     private final WebsiteRepository websiteRepository;
-    private final WordRepository wordRepository;
     private final WebsiteWordRepository websiteWordRepository;
     private final ModelMapper modelMapper;
 
-    public WebsiteService(WebsiteRepository websiteRepository, UserService userService, WordRepository wordRepository, WebsiteWordRepository websiteWordRepository, WordService wordService, ModelMapper modelMapper) {
+    public WebsiteService(WebsiteRepository websiteRepository, UserService userService, WebsiteWordRepository websiteWordRepository, WordService wordService, ModelMapper modelMapper) {
         this.websiteRepository = websiteRepository;
         this.userService = userService;
-        this.wordRepository = wordRepository;
         this.websiteWordRepository = websiteWordRepository;
         this.wordService = wordService;
         this.modelMapper = modelMapper;
     }
 
-    public List<Website> getAllUserWebsites(long userId) {
-        User user = userService.getUser(userId);
+    public List<Website> getAllUserWebsites() {
+        User user = userService.getAuthenticatedUser();
         return websiteRepository.findAllByUser(user);
     }
 
-    public Website add(long userId, Website website) {
-        User user = userService.getUser(userId);
+    public Website add(Website website) {
+        User user = userService.getAuthenticatedUser();
 
         String url = website.getUrl();
         if(websiteRepository.existsByUserAndUrl(user, url)) {
-            String message = "Website with User Id " + userId + " and url " + url + " already exists!";
+            String message = "Website with User with id " + user.getId() + " and url " + url + " already exists!";
             throw new ResourceAlreadyExistsException(message);
         };
 
@@ -65,8 +63,7 @@ public class WebsiteService {
         String text = wordAmountDTO.getText();
         int amount = wordAmountDTO.getAmount();
 
-        Word word = wordRepository.findByText(text)
-                .orElse(wordRepository.save(new Word(text)));
+        Word word = wordService.getWordByText(text, true);
 
         Website websiteReference = websiteRepository.getOne(websiteId);
         if(websiteWordRepository.existsByWebsiteAndWord(websiteReference, word)) {
@@ -76,11 +73,8 @@ public class WebsiteService {
 
         WebsiteWord websiteWord = new WebsiteWord(amount, word);
         websiteWord.setWebsite(websiteReference);
-        websiteWordRepository.save(websiteWord);
-
         wordService.increaseUserWordAmount(word, amount);
-
-        return websiteWord;
+        return websiteWordRepository.save(websiteWord);
     }
 
     public List<WebsiteWordDTO> getAllUserWebsiteWords(long websiteId) {
@@ -94,11 +88,5 @@ public class WebsiteService {
         List<WebsiteWordDTO> websiteWordDTOs = new LinkedList<>();
         websiteWords.forEach((websiteWord)-> websiteWordDTOs.add(modelMapper.map(websiteWord, WebsiteWordDTO.class)));
         return websiteWordDTOs;
-    }
-
-    @PostAuthorize("hasPermission(returnObject, 'READ')")
-    public Website getWebsite(long websiteId) {
-        return websiteRepository.findById(websiteId)
-                .orElseThrow(() -> new ResourceNotFoundException(Website.class, websiteId));
     }
 }
