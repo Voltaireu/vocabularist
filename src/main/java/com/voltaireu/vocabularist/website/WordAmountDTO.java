@@ -5,7 +5,7 @@ public class WordAmountDTO {
     private String text;
     private int amount;
 
-    WordAmountDTO(String text, int amount) {
+    public WordAmountDTO(String text, int amount) {
         this.text = text;
         this.amount = amount;
     }

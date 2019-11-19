@@ -1,7 +1,9 @@
 package com.voltaireu.vocabularist.word;
 
-import com.voltaireu.vocabularist.user.User;
+import com.voltaireu.vocabularist.user.model.User;
 import com.voltaireu.vocabularist.user.UserService;
+import com.voltaireu.vocabularist.word.model.UserWord;
+import com.voltaireu.vocabularist.word.model.Word;
 import org.springframework.stereotype.Service;
 
 @Service

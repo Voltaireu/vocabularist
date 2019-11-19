@@ -1,6 +1,5 @@
 package com.voltaireu.vocabularist.other;
 
-import com.voltaireu.vocabularist.user.User;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ResponseStatus;
 

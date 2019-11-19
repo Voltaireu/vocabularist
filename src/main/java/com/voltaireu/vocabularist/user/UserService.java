@@ -2,13 +2,12 @@ package com.voltaireu.vocabularist.user;
 
 import com.voltaireu.vocabularist.other.ResourceAlreadyExistsException;
 import com.voltaireu.vocabularist.other.ResourceNotFoundException;
-import com.voltaireu.vocabularist.security.model.Role;
-import com.voltaireu.vocabularist.security.repository.RoleRepository;
+import com.voltaireu.vocabularist.security.authority.Role;
+import com.voltaireu.vocabularist.security.authority.RoleRepository;
+import com.voltaireu.vocabularist.user.model.User;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-
-import static com.voltaireu.vocabularist.security.model.RoleName.ROLE_USER;
 
 @Service
 public class UserService {
@@ -23,17 +22,18 @@ public class UserService {
         this.userRepository = userRepository;
     }
 
-    public void register(User user){
+    public User register(User user){
         if (userRepository.existsByEmail(user.getEmail()) || userRepository.existsByUsername(user.getUsername())) {
             String message = "User with given email or username already exists";
             throw new ResourceAlreadyExistsException(message);
         }
 
-        Role role = roleRepository.getByName(ROLE_USER);
+        Role role = roleRepository.getByName("ROLE_USER");
         user.addRole(role);
+
         user.setPassword(passwordEncoder.encode(user.getPassword()));
         user.setEnabled(true);
-        userRepository.save(user);
+        return userRepository.save(user);
     }
 
     public String getUsername() {

@@ -3,8 +3,7 @@ package com.voltaireu.vocabularist.user;
 import com.fasterxml.jackson.annotation.JsonView;
 import com.voltaireu.vocabularist.other.ResourceNotFoundException;
 import com.voltaireu.vocabularist.other.Views;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import com.voltaireu.vocabularist.user.model.User;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
@@ -25,10 +24,7 @@ public class UserController {
     @PostMapping("/users")
     @JsonView(Views.Public.class)
     public User createUser(@RequestBody @Valid User user) {
-        userService.register(user);
-        Log logger = LogFactory.getLog(getClass());
-        logger.warn(user.getUsername());
-        return user;
+        return userService.register(user);
     }
 
     @RequestMapping(value = "/users", method = RequestMethod.HEAD, params = "username")
