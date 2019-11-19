@@ -1,5 +1,7 @@
 package com.voltaireu.vocabularist.security;
 
+import com.voltaireu.vocabularist.security.acl.AclPermission;
+import com.voltaireu.vocabularist.security.role.RoleName;
 import org.springframework.cache.ehcache.EhCacheFactoryBean;
 import org.springframework.cache.ehcache.EhCacheManagerFactoryBean;
 import org.springframework.context.annotation.Bean;
@@ -41,7 +43,9 @@ public class AclMethodSecurityConfig extends GlobalMethodSecurityConfiguration {
 
     @Bean
     public PermissionEvaluator permissionEvaluator() {
-        return new AclPermissionEvaluator(aclService());
+        AclPermissionEvaluator permissionEvaluator = new AclPermissionEvaluator(aclService());
+        permissionEvaluator.setPermissionFactory(permissionFactory());
+        return permissionEvaluator;
     }
 
     @Bean
@@ -56,12 +60,19 @@ public class AclMethodSecurityConfig extends GlobalMethodSecurityConfiguration {
 
     @Bean
     public LookupStrategy lookupStrategy() {
-        return new BasicLookupStrategy(
+        BasicLookupStrategy lookupStrategy = new BasicLookupStrategy(
                 dataSource,
                 aclCache(),
                 aclAuthorizationStrategy(),
                 new ConsoleAuditLogger()
         );
+        lookupStrategy.setPermissionFactory(permissionFactory());
+        return lookupStrategy;
+    }
+
+    @Bean
+    public PermissionFactory permissionFactory() {
+        return new DefaultPermissionFactory(AclPermission.class);
     }
 
     @Bean
@@ -103,6 +114,6 @@ public class AclMethodSecurityConfig extends GlobalMethodSecurityConfiguration {
 
     @Bean
     public SimpleGrantedAuthority adminAuthority() {
-        return new SimpleGrantedAuthority("ROLE_ADMIN");
+        return new SimpleGrantedAuthority(RoleName.ROLE_ADMIN.name());
     }
 }

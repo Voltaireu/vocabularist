@@ -40,4 +40,9 @@ public class WebsiteController {
     public WebsiteWord addWebsiteWord(@PathVariable long websiteId, @RequestBody WordAmountDTO wordAmountDTO) {
         return websiteService.addWebsiteWord(websiteId, wordAmountDTO);
     }
+
+    @GetMapping("/websites/{websiteId}")
+    public Website getWebsite(@PathVariable long websiteId) {
+        return websiteService.getWebsite(websiteId);
+    }
 }

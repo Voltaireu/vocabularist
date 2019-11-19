@@ -1,5 +1,6 @@
 package com.voltaireu.vocabularist.security.acl;
 
+import org.springframework.security.acls.domain.ObjectIdentityImpl;
 import org.springframework.security.acls.model.*;
 import org.springframework.stereotype.Component;
 
@@ -14,7 +15,12 @@ public class AclUtil {
         this.mutableAclService = mutableAclService;
     }
 
-    public MutableAcl getAcl(ObjectIdentity objectIdentity) {
+    public ObjectIdentity createObjectIdentity(Class resourceClass, Long resourceId) {
+        return new ObjectIdentityImpl(resourceClass, resourceId);
+    };
+
+    public MutableAcl getAcl(Class resourceClass, Long resourceId) {
+        ObjectIdentity objectIdentity = createObjectIdentity(resourceClass, resourceId);
         MutableAcl acl;
         try {
             acl = (MutableAcl) mutableAclService.readAclById(objectIdentity);
@@ -33,5 +39,13 @@ public class AclUtil {
                 acl.deleteAce(i);
             }
         }
+    }
+
+    public void updateAcl(MutableAcl acl) {
+        mutableAclService.updateAcl(acl);
+    }
+
+    public void deleteAcl(ObjectIdentity objectIdentity) {
+        mutableAclService.deleteAcl(objectIdentity, false);
     }
 }

@@ -12,11 +12,9 @@ import com.voltaireu.vocabularist.website.model.WebsiteWord;
 import com.voltaireu.vocabularist.website.repository.WebsiteRepository;
 import com.voltaireu.vocabularist.website.repository.WebsiteWordRepository;
 import com.voltaireu.vocabularist.word.model.Word;
-import com.voltaireu.vocabularist.word.WordRepository;
 import com.voltaireu.vocabularist.word.WordService;
 import org.modelmapper.ModelMapper;
 import org.springframework.security.access.prepost.PostAuthorize;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.acls.domain.BasePermission;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -32,13 +30,15 @@ public class WebsiteService {
     private final WebsiteRepository websiteRepository;
     private final WebsiteWordRepository websiteWordRepository;
     private final ModelMapper modelMapper;
+    private final PermissionManager permissionManager;
 
-    public WebsiteService(WebsiteRepository websiteRepository, UserService userService, WebsiteWordRepository websiteWordRepository, WordService wordService, ModelMapper modelMapper) {
+    public WebsiteService(WebsiteRepository websiteRepository, UserService userService, WebsiteWordRepository websiteWordRepository, WordService wordService, ModelMapper modelMapper, PermissionManager permissionManager) {
         this.websiteRepository = websiteRepository;
         this.userService = userService;
         this.websiteWordRepository = websiteWordRepository;
         this.wordService = wordService;
         this.modelMapper = modelMapper;
+        this.permissionManager = permissionManager;
     }
 
     public List<Website> getAllUserWebsites() {
@@ -46,6 +46,7 @@ public class WebsiteService {
         return websiteRepository.findAllByUser(user);
     }
 
+    @Transactional
     public Website add(Website website) {
         User user = userService.getAuthenticatedUser();
 
@@ -56,13 +57,18 @@ public class WebsiteService {
         };
 
         website.setUser(user);
-        return websiteRepository.save(website);
+        Website result = websiteRepository.save(website);
+
+        return result;
     }
 
     public WebsiteWord addWebsiteWord(long websiteId, WordAmountDTO wordAmountDTO) {
+        if(!websiteRepository.existsById(websiteId)) {
+            throw new ResourceNotFoundException(Website.class, websiteId);
+        }
+
         String text = wordAmountDTO.getText();
         int amount = wordAmountDTO.getAmount();
-
         Word word = wordService.getWordByText(text, true);
 
         Website websiteReference = websiteRepository.getOne(websiteId);
@@ -88,5 +94,11 @@ public class WebsiteService {
         List<WebsiteWordDTO> websiteWordDTOs = new LinkedList<>();
         websiteWords.forEach((websiteWord)-> websiteWordDTOs.add(modelMapper.map(websiteWord, WebsiteWordDTO.class)));
         return websiteWordDTOs;
+    }
+
+    @PostAuthorize("hasPermission(returnObject, 'READ')")
+    public Website getWebsite(long websiteId) {
+        return websiteRepository.findById(websiteId)
+                .orElseThrow(() -> new ResourceNotFoundException(Website.class, websiteId));
     }
 }

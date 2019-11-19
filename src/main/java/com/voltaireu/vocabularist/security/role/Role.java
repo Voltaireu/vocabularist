@@ -1,6 +1,10 @@
 package com.voltaireu.vocabularist.security.role;
 
+import com.voltaireu.vocabularist.user.model.User;
+
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
+import java.util.List;
 
 @Entity
 @Table(name = "role")
@@ -11,12 +15,17 @@ public class Role {
     @Column(name = "role_id")
     private Long id;
 
+    @NotNull
+    @Enumerated(EnumType.STRING)
     @Column(name = "role_name")
-    private String name;
+    private RoleName name;
+
+    @ManyToMany(mappedBy = "authorities", fetch = FetchType.LAZY)
+    private List<User> users;
 
     public Role() { }
 
-    public Role(String name) {
+    public Role(RoleName name) {
         this.name = name;
     }
 
@@ -24,11 +33,7 @@ public class Role {
         return id;
     }
 
-    public String getName() {
+    public RoleName getName() {
         return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
     }
 }
