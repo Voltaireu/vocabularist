@@ -65,4 +65,12 @@ public class UserWord {
     public void setUser(User user) {
         this.user = user;
     }
+
+    public boolean isKnown() {
+        return known;
+    }
+
+    public void setKnown(boolean known) {
+        this.known = known;
+    }
 }

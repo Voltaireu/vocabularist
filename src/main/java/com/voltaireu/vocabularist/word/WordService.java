@@ -58,4 +58,13 @@ public class WordService {
         userWord.setUser(user);
         return userWord;
     }
+
+    public void updateWordKnown(long wordId, WordKnownDTO wordKnownDTO) {
+        User user = userService.getAuthenticatedUser();
+        Word word = wordRepository.findById(wordId)
+                .orElseThrow(()-> new ResourceNotFoundException(Word.class, wordId));
+        UserWord userWord = userWordRepository.findByWordAndUser(word, user)
+                .orElseThrow(()-> new ResourceNotFoundException("Word with id " + wordId + " is not in dictionary of user with username " + user.getUsername()));
+        userWord.setKnown(wordKnownDTO.isKnown());
+    }
 }
