@@ -17,15 +17,18 @@ public class UserWord {
     private Long id;
 
     @ManyToOne
-    @JoinColumn(name = "word_id")
+    @JoinColumn(name = "user_word_word_id")
     private Word word;
 
     @Column(name = "user_word_amount")
     private int amountInGeneral;
 
     @ManyToOne
-    @JoinColumn(name = "user_id")
+    @JoinColumn(name = "user_word_user_id")
     private User user;
+
+    @Column(name = "user_word_known")
+    private boolean known;
 
     public UserWord() {
         this.amountInGeneral = 0;

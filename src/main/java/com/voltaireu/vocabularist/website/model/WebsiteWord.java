@@ -19,11 +19,11 @@ public class WebsiteWord {
 
     @ManyToOne
     @JsonIgnore
-    @JoinColumn(name = "website_id")
+    @JoinColumn(name = "website_word_website_id")
     private Website website;
 
     @ManyToOne
-    @JoinColumn(name = "word_id")
+    @JoinColumn(name = "website_word_word_id")
     private Word word;
 
     public WebsiteWord() {
