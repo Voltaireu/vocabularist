@@ -13,6 +13,7 @@ import com.voltaireu.vocabularist.website.repository.WebsiteRepository;
 import com.voltaireu.vocabularist.website.repository.WebsiteWordRepository;
 import com.voltaireu.vocabularist.word.WordRepository;
 import com.voltaireu.vocabularist.word.model.Word;
+import javassist.NotFoundException;
 import org.springframework.security.access.prepost.PostAuthorize;
 import org.springframework.security.access.prepost.PostFilter;
 import org.springframework.stereotype.Service;
@@ -73,6 +74,10 @@ public class ExamService {
     @Transactional
     public Flashcard addFlashcard(long examId, FlashcardDTO flashcardDTO) {
         Exam exam = get(examId);
+        if (exam.isFinished()) {
+            throw new ExamIsFinishedException("Cannot add flashcard to Exam with id " + examId + ". Exam is already finished!");
+        }
+
         long wordId = flashcardDTO.getWordId();
         Word word = wordRepository.findById(wordId)
                 .orElseThrow(() -> new ResourceNotFoundException(Word.class, wordId));
@@ -99,6 +104,9 @@ public class ExamService {
 
     public void finishExam(long examId) {
         Exam exam = get(examId);
+        if (exam.isFinished()) {
+            throw new ExamIsFinishedException("Cannot finish Exam with id " + examId + ". Exam is already finished!");
+        }
         exam.setFinished(true);
         examRepository.save(exam);
     }
