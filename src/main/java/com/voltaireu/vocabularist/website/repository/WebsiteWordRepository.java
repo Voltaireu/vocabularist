@@ -10,5 +10,5 @@ import java.util.List;
 public interface WebsiteWordRepository extends JpaRepository<WebsiteWord, Integer> {
     boolean existsByWebsiteAndWord(Website website, Word word);
 
-    List<WebsiteWord> findAllByWebsite(Website websiteReference);
+    List<WebsiteWord> findAllByWebsiteId(long websiteId);
 }

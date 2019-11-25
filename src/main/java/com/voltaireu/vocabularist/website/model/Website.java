@@ -1,6 +1,7 @@
 package com.voltaireu.vocabularist.website.model;
 
 import com.fasterxml.jackson.annotation.*;
+import com.voltaireu.vocabularist.exam.model.Exam;
 import com.voltaireu.vocabularist.user.model.User;
 import org.hibernate.validator.constraints.URL;
 
@@ -27,14 +28,24 @@ public class Website {
     @JsonIgnore
     private List<WebsiteWord> websiteWords = new ArrayList<>();
 
+    @OneToMany
+    @JsonIgnore
+    private List<Exam> exams = new ArrayList<>();
+
     @ManyToOne
     @JoinColumn(name = "website_user_id")
-    @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class,
-            property = "id")
-    @JsonIdentityReference(alwaysAsId = true)
+    @JsonBackReference
     private User user;
 
     public Website() {
+    }
+
+    public List<Exam> getExams() {
+        return exams;
+    }
+
+    public void addExam(Exam exam) {
+        this.exams.add(exam);
     }
 
     public Website(String url) {

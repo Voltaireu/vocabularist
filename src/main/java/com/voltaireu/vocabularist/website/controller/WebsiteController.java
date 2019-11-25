@@ -37,7 +37,7 @@ public class WebsiteController {
 
     @ResponseStatus(HttpStatus.CREATED)
     @PostMapping("/websites/{websiteId}/words")
-    public WebsiteWord addWebsiteWord(@PathVariable long websiteId, @RequestBody WordAmountDTO wordAmountDTO) {
+    public WebsiteWordDTO addWebsiteWord(@PathVariable long websiteId, @RequestBody WordAmountDTO wordAmountDTO) {
         return websiteService.addWebsiteWord(websiteId, wordAmountDTO);
     }
 

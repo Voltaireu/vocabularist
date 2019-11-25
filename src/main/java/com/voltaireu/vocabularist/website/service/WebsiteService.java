@@ -1,8 +1,9 @@
 package com.voltaireu.vocabularist.website.service;
 
+import com.voltaireu.vocabularist.other.NoContentException;
 import com.voltaireu.vocabularist.other.ResourceAlreadyExistsException;
 import com.voltaireu.vocabularist.other.ResourceNotFoundException;
-import com.voltaireu.vocabularist.security.acl.PermissionManager;
+import com.voltaireu.vocabularist.security.acl.AclPermission;
 import com.voltaireu.vocabularist.user.model.User;
 import com.voltaireu.vocabularist.user.UserService;
 import com.voltaireu.vocabularist.website.WebsiteWordDTO;
@@ -15,7 +16,6 @@ import com.voltaireu.vocabularist.word.model.Word;
 import com.voltaireu.vocabularist.word.WordService;
 import org.modelmapper.ModelMapper;
 import org.springframework.security.access.prepost.PostAuthorize;
-import org.springframework.security.acls.domain.BasePermission;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -30,15 +30,13 @@ public class WebsiteService {
     private final WebsiteRepository websiteRepository;
     private final WebsiteWordRepository websiteWordRepository;
     private final ModelMapper modelMapper;
-    private final PermissionManager permissionManager;
 
-    public WebsiteService(WebsiteRepository websiteRepository, UserService userService, WebsiteWordRepository websiteWordRepository, WordService wordService, ModelMapper modelMapper, PermissionManager permissionManager) {
+    public WebsiteService(WebsiteRepository websiteRepository, UserService userService, WebsiteWordRepository websiteWordRepository, WordService wordService, ModelMapper modelMapper) {
         this.websiteRepository = websiteRepository;
         this.userService = userService;
         this.websiteWordRepository = websiteWordRepository;
         this.wordService = wordService;
         this.modelMapper = modelMapper;
-        this.permissionManager = permissionManager;
     }
 
     public List<Website> getAllUserWebsites() {
@@ -58,11 +56,11 @@ public class WebsiteService {
 
         website.setUser(user);
         Website result = websiteRepository.save(website);
-
+        userService.addPrincipalPermission(Website.class, website.getId(), AclPermission.ADMINISTRATION);
         return result;
     }
 
-    public WebsiteWord addWebsiteWord(long websiteId, WordAmountDTO wordAmountDTO) {
+    public WebsiteWordDTO addWebsiteWord(long websiteId, WordAmountDTO wordAmountDTO) {
         if(!websiteRepository.existsById(websiteId)) {
             throw new ResourceNotFoundException(Website.class, websiteId);
         }
@@ -80,7 +78,8 @@ public class WebsiteService {
         WebsiteWord websiteWord = new WebsiteWord(amount, word);
         websiteWord.setWebsite(websiteReference);
         wordService.increaseUserWordAmount(word, amount);
-        return websiteWordRepository.save(websiteWord);
+        websiteWord = websiteWordRepository.save(websiteWord);
+        return modelMapper.map(websiteWord, WebsiteWordDTO.class);
     }
 
     public List<WebsiteWordDTO> getAllUserWebsiteWords(long websiteId) {
@@ -88,15 +87,17 @@ public class WebsiteService {
             throw new ResourceNotFoundException(Website.class, websiteId);
         }
 
-        Website websiteReference = websiteRepository.getOne(websiteId);
-        List<WebsiteWord> websiteWords = websiteWordRepository.findAllByWebsite(websiteReference);
+        List<WebsiteWord> websiteWords = websiteWordRepository.findAllByWebsiteId(websiteId);
+        if(websiteWords.isEmpty()) {
+            throw new NoContentException();
+        }
 
         List<WebsiteWordDTO> websiteWordDTOs = new LinkedList<>();
         websiteWords.forEach((websiteWord)-> websiteWordDTOs.add(modelMapper.map(websiteWord, WebsiteWordDTO.class)));
         return websiteWordDTOs;
     }
 
-    @PostAuthorize("hasPermission(returnObject, 'READ')")
+    @PostAuthorize("hasPermission(returnObject, 'READ') or hasPermission(returnObject, 'ADMINISTRATION')")
     public Website getWebsite(long websiteId) {
         return websiteRepository.findById(websiteId)
                 .orElseThrow(() -> new ResourceNotFoundException(Website.class, websiteId));
